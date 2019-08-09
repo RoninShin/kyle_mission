@@ -12,4 +12,6 @@ import com.kyle.mission.model.RoleName;
 @Repository
 public interface ProgramRepository extends JpaRepository<Program, Long> {
     Optional<Role> findByName(RoleName roleName);
+
+	boolean existsByName(String name);
 }

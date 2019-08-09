@@ -21,7 +21,8 @@ JWT (JSON Web Token)는 당사자간에 정보를 안전하게 JSON 객체로 �
     └── api
          ├── auth
               ├── signup
-              └── signin
+              ├── signin
+              └── refreshToken
          ├── admin
               ├── ping
               └── insertRegion

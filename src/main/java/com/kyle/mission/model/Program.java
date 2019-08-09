@@ -8,13 +8,20 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+
+import org.hibernate.annotations.NaturalId;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "programs")
+@Table(name = "programs", uniqueConstraints = {
+    @UniqueConstraint(columnNames = {
+        "name"
+    })
+})
 @Data 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -23,6 +30,8 @@ public class Program {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @NaturalId
+    @Column(length = 100)
     private String name;
 
     private String theme;
@@ -35,4 +44,11 @@ public class Program {
     @ManyToOne
     @JoinColumn
     private Region region;
+
+    public Program(String name, String theme, String prgm_desc, String prgm_detail) {
+        this.name = name;
+        this.theme = theme;
+        this.prgm_desc = prgm_desc;
+        this.prgm_detail = prgm_detail;
+    }
 }

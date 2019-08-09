@@ -2,9 +2,13 @@ package com.kyle.mission.controller;
 
 import javax.validation.Valid;
 
+import com.kyle.mission.message.request.ProgramForm;
 import com.kyle.mission.message.request.RegionForm;
+import com.kyle.mission.model.Program;
 import com.kyle.mission.model.Region;
+import com.kyle.mission.repository.ProgramRepository;
 import com.kyle.mission.repository.RegionRepository;
+import com.kyle.mission.security.services.ProgramService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +23,12 @@ public class AdminRestAPIs {
 	
     @Autowired
     RegionRepository regionRepository;
+
+    @Autowired
+    ProgramRepository programRepository;
+
+	@Autowired
+    ProgramService programService;
 
 	// @GetMapping("/api/test/user")
 	// @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
@@ -35,34 +45,44 @@ public class AdminRestAPIs {
 	@GetMapping("/api/admin/ping")
 	@PreAuthorize("hasRole('ADMIN')")
 	public String adminAccess() {
-		return ">>> Admin Contents";
+		return ">>> Admin Ping Success";
 	}
 
 	@PostMapping("/api/admin/insertRegion")
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<String> insertRegion(@Valid @RequestBody RegionForm regionRequest) {
+		if (regionRepository.existsByName(regionRequest.getName()))
+			return ResponseEntity.ok().body("region already exists"); 
+
 		Region region = new Region(regionRequest.getName());
-		
 		regionRepository.save(region);
 
         return ResponseEntity.ok().body("region registered successfully!");
 	}
 
-	@PostMapping("/api/admin/updateRegion")
-	@PreAuthorize("hasRole('ADMIN')")
-	public String updateRegion() {
-		return ">>> Admin Contents";
-	}
-
 	@PostMapping("/api/admin/insertProgram")
 	@PreAuthorize("hasRole('ADMIN')")
-	public String insertProgram() {
-		return ">>> Admin Contents";
+	public ResponseEntity<String> insertProgram(@Valid @RequestBody ProgramForm programRequest) {
+		if (programRepository.existsByName(programRequest.getName()))
+			return ResponseEntity.ok().body("program already exists"); 
+
+		Program program = programService.save(programRequest);
+		if (program == null || program.getId() == 0)
+			return ResponseEntity.ok().body("program regist failed!"); 
+
+		return ResponseEntity.ok().body("program registered successfully!");
 	}
 
 	@PostMapping("/api/admin/updateProgram")
 	@PreAuthorize("hasRole('ADMIN')")
-	public String updateProgram() {
-		return ">>> Admin Contents";
+	public ResponseEntity<String> updateProgram(@Valid @RequestBody ProgramForm programRequest) {
+		if (programRequest.getId()<=0)
+			return ResponseEntity.ok().body("program dont update"); 
+
+		Program program = programService.save(programRequest);
+		if (program == null || program.getId() == 0)
+			return ResponseEntity.ok().body("program update failed!"); 
+
+		return ResponseEntity.ok().body("program updated successfully!");
 	}
 }
