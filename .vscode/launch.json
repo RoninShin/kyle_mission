@@ -9,6 +9,16 @@
             "name": "Debug (Launch) - Current File",
             "request": "launch",
             "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-SpringBootMissionApplication<SpringBootMission>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "mainClass": "com.kyle.mission.SpringBootMissionApplication",
+            "projectName": "SpringBootMission",
+            "args": ""
         }
     ]
 }
