@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data 
 @NoArgsConstructor
 @AllArgsConstructor
-public class RegionForm {
+public class KeywordForm {
  
-    private String region;
+    private String keyword;
 }

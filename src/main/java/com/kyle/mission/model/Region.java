@@ -11,8 +11,10 @@ import org.hibernate.annotations.NaturalId;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
+import lombok.Setter;
+import lombok.ToString;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -25,9 +27,9 @@ import java.util.stream.Stream;
         "name"
     })
 })
-@Data 
+@Getter 
+@Setter
 @NoArgsConstructor
-@AllArgsConstructor
 @EqualsAndHashCode(exclude = "programs")
 public class Region {
     @Id
@@ -38,7 +40,7 @@ public class Region {
     @Column(length = 100)
     private String name;
 
-    @OneToMany(mappedBy = "region", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "region", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Program> programs;
 
     public Region(String name, Program... programs) {

@@ -30,4 +30,4 @@ nbdist/
 .nb-gradle/
 
 ### VS CODE ###
-.vscode/
+.vscode

@@ -12,6 +12,7 @@
 * Spring JPA
 * Lombok
 * MySQL
+* Swagger
 
 ## 문제해결 전략
 

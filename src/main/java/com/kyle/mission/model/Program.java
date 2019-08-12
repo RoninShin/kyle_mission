@@ -2,29 +2,36 @@ package com.kyle.mission.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 
 import org.hibernate.annotations.NaturalId;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @Entity
-@Table(name = "programs", uniqueConstraints = {
-    @UniqueConstraint(columnNames = {
-        "name"
-    })
-})
-@Data 
+@Table(name = "programs"
+// , uniqueConstraints = {
+//     @UniqueConstraint(columnNames = {
+//         "name"
+//     })
+// }
+)
+@Getter 
+@Setter
 @NoArgsConstructor
-@AllArgsConstructor
+@ToString(exclude = {"region", "prgm_desc", "prgm_detail"})
 public class Program {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,9 +48,14 @@ public class Program {
     @Column(length = 4000)
     private String prgm_detail;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn
     private Region region;
+
+    // Join 테이블이 Json결과에 표시되지 않도록 처리.
+    protected Region getRegion() {
+        return region;
+    }
 
     public Program(String name, String theme, String prgm_desc, String prgm_detail) {
         this.name = name;
