@@ -9,8 +9,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ProgramForm {
 
-    private int id;
-
     private String name;
 
     private String theme;

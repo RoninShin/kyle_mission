@@ -11,11 +11,15 @@ import com.kyle.mission.repository.RegionRepository;
 import com.kyle.mission.security.services.ProgramService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,6 +38,9 @@ public class AdminRestAPIs {
 	
     @Autowired
     RegionRepository regionRepository;
+
+    @Autowired
+    ProgramRepository programRepository;
 
 	@Autowired
     ProgramService programService;
@@ -57,44 +64,96 @@ public class AdminRestAPIs {
 		return ">>> Admin Ping Success";
 	}
 
+	//#region : 서비스 지역 관리
+	@ApiOperation(value = "서비스 지역 조회", notes = "서비스 지역을 조회한다.")
+	@GetMapping("/v1/region/{id}")
+	@PreAuthorize("hasRole('ADMIN')")
+	public ResponseEntity<?> region_findById(@ApiParam(value = "지역ID", required = true) @PathVariable long id) {
+		return regionRepository.findById(id)
+          .map(record -> ResponseEntity.ok().body(record))
+          .orElse(ResponseEntity.notFound().build());
+	}
+
 	@ApiOperation(value = "서비스 지역 등록", notes = "서비스 지역을 등록한다.")
-	@PostMapping("/v1/insertRegion")
+	@PostMapping("/v1/region/create")
 	@PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<String> insertRegion(@Valid @RequestBody @ApiParam(value = "지역정보", required = true) RegionForm regionRequest) {
-		if (regionRepository.existsByName(regionRequest.getRegion()))
-			return ResponseEntity.ok().body("region already exists"); 
-
-		Region region = new Region(regionRequest.getRegion());
-		regionRepository.save(region);
-
-        return ResponseEntity.ok().body("region registered successfully!");
+	public ResponseEntity<?> region_create(@Valid @RequestBody @ApiParam(value = "지역정보", required = true) RegionForm regionRequest) {
+		return regionRepository.findByName(regionRequest.getRegion())
+			.map(record -> {
+				return new ResponseEntity<Region>(record, HttpStatus.FOUND);
+			}).orElseGet(() -> {
+				return ResponseEntity.ok().body(regionRepository.save(new Region(regionRequest.getRegion())));
+			});
 	}
 
-	@ApiOperation(value = "프로그램 등록", notes = "프로그램을 등록한다.")
-	@PostMapping("/v1/insertProgram")
+	@ApiOperation(value = "서비스 지역 수정", notes = "서비스 지역을 수정한다.")
+	@PutMapping("/v1/region/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<String> insertProgram(@Valid @RequestBody @ApiParam(value = "프로그램 정보", required = true) ProgramForm programRequest) {
-		// if (programRepository.existsByName(programRequest.getName()))
-		// 	return ResponseEntity.ok().body("program already exists"); 
+	public ResponseEntity<?> region_update(@ApiParam(value = "지역ID", required = true) @PathVariable long id,
+											@Valid @RequestBody @ApiParam(value = "지역정보", required = true) RegionForm regionRequest) {
+		return regionRepository.findById(id)
+				.map(record -> {
+					record.setId(id);
+					record.setName(regionRequest.getRegion());
+					Region updated = regionRepository.save(record);
+					return ResponseEntity.ok().body(updated);
+				}).orElse(ResponseEntity.notFound().build());
+	}
 
-		Program program = programService.save(programRequest);
+	@ApiOperation(value = "서비스 지역 삭제", notes = "서비스 지역을 삭제한다.")
+	@DeleteMapping("/v1/region/{id}")
+	@PreAuthorize("hasRole('ADMIN')")
+	public ResponseEntity<?> region_delete(@ApiParam(value = "지역ID", required = true) @PathVariable long id) {
+		return regionRepository.findById(id)
+				.map(record -> {
+					regionRepository.deleteById(id);
+					return ResponseEntity.ok().build();
+				}).orElse(ResponseEntity.notFound().build());
+	}
+	//#endregion
+
+	//#region : 생태 관광 정보 관리
+	@ApiOperation(value = "생태 관광 정보 조회", notes = "생태 관광 정보를 조회한다.")
+	@GetMapping("/v1/program/{id}")
+	@PreAuthorize("hasRole('ADMIN')")
+	public ResponseEntity<?> program_findById(@ApiParam(value = "프로그램ID", required = true) @PathVariable long id) {
+		return programRepository.findById(id)
+          .map(record -> ResponseEntity.ok().body(record))
+          .orElse(ResponseEntity.notFound().build());
+	}
+
+	@ApiOperation(value = "생태 관광 정보 등록", notes = "생태 관광 정보를 등록한다.")
+	@PostMapping("/v1/program/create")
+	@PreAuthorize("hasRole('ADMIN')")
+	public ResponseEntity<?> program_create(@Valid @RequestBody @ApiParam(value = "프로그램 정보", required = true) ProgramForm programRequest) {
+		Program program = programService.save(0L, programRequest);
 		if (program == null || program.getId() == 0)
-			return ResponseEntity.ok().body("program regist failed!"); 
+			return new ResponseEntity<String>("program regist failed!", HttpStatus.METHOD_FAILURE);
 
-		return ResponseEntity.ok().body("program registered successfully!");
+		return ResponseEntity.ok().body(program);
 	}
 
-	@ApiOperation(value = "프로그램 수정", notes = "프로그램을 수정한다.")
-	@PostMapping("/v1/updateProgram")
+	@ApiOperation(value = "생태 관광 정보 수정", notes = "생태 관광 정보를 수정한다.")
+	@PutMapping("/v1/program/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<String> updateProgram(@Valid @RequestBody @ApiParam(value = "프로그램 정보", required = true) ProgramForm programRequest) {
-		if (programRequest.getId()<=0)
-			return ResponseEntity.ok().body("program dont update"); 
-
-		Program program = programService.save(programRequest);
+	public ResponseEntity<?> program_update(@ApiParam(value = "프로그램ID", required = true) @PathVariable long id,
+											@Valid @RequestBody @ApiParam(value = "프로그램 정보", required = true) ProgramForm programRequest) {
+		Program program = programService.save(id, programRequest);
 		if (program == null || program.getId() == 0)
-			return ResponseEntity.ok().body("program update failed!"); 
+			return new ResponseEntity<String>("program update failed!", HttpStatus.METHOD_FAILURE);
 
-		return ResponseEntity.ok().body("program updated successfully!");
+		return ResponseEntity.ok().body(program);
 	}
+
+	@ApiOperation(value = "생태 관광 정보 삭제", notes = "생태 관광 정보를 삭제한다.")
+	@DeleteMapping("/v1/program/{id}")
+	@PreAuthorize("hasRole('ADMIN')")
+	public ResponseEntity<?> program_delete(@ApiParam(value = "프로그램ID", required = true) @PathVariable long id) {
+		return programRepository.findById(id)
+				.map(record -> {
+					programRepository.deleteById(id);
+					return ResponseEntity.ok().build();
+				}).orElse(ResponseEntity.notFound().build());
+	}	
+	////#endregion
 }

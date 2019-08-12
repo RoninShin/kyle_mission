@@ -1,10 +1,12 @@
 package com.kyle.mission;
 
 import static org.junit.Assert.assertThat;
+import static org.mockito.ArgumentMatchers.isNotNull;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import com.kyle.mission.message.response.KeywordResponse;
 import com.kyle.mission.model.Program;
@@ -13,6 +15,8 @@ import com.kyle.mission.repository.ProgramRepository;
 import com.kyle.mission.repository.RegionRepository;
 
 import org.hamcrest.core.IsNot;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,6 +25,8 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.transaction.AfterTransaction;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
@@ -30,7 +36,7 @@ import static org.hamcrest.Matchers.greaterThan;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
-@ActiveProfiles("local")
+//@ActiveProfiles("local")
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class JpaTest {
     
@@ -40,10 +46,51 @@ public class JpaTest {
     @Autowired
     private ProgramRepository programRepository;
 
+    @Before
+    public void jpa_Before() {
+        //Given:
+        String region_name = "성남시";
+        Region region = regionRepository.findByName(region_name).orElseGet(() -> {
+            return regionRepository.save(new Region(region_name));
+        });
+
+        Program program1 = new Program ("성남수영대회", "수영", "수영을 배우자", "수영에 관한 기초연습");
+        program1.setRegion(region);
+        programRepository.save(program1);
+
+        Program program2 = new Program ("성남수영대회2", "수영2", "수영을 배우자2", "수영에 관한 기초연습2");
+        program2.setRegion(region);
+        programRepository.save(program2);
+        
+    }
+
+    @AfterTransaction
+    public void jpa_After() {
+        Program program1 = programRepository.findByName("성남수영대회").orElse(new Program());
+        programRepository.delete(program1);
+
+        Program program2 = programRepository.findByName("성남수영대회2").orElse(new Program());
+        programRepository.delete(program2);
+
+        String region_name = "성남시";
+        Region regionInfo = regionRepository.findByName(region_name).orElse(new Region());
+        regionRepository.delete(regionInfo);
+    }
+
+    @Test
+    public void 서비스_지역과_생태_관광_정보_등록() {
+        //Given:
+        String region_name = "성남시";
+
+        //When:
+        Region regionInfo = regionRepository.findByName(region_name).orElse(new Region());
+
+        //Then:
+        assertThat(regionInfo.getId(), greaterThan(0L));
+    }
+
     @Test
     public void 서비스_지역_컬럼에서_특정_지역에서_진행되는_프로그램명과_테마를_출력() {
-        //Given:
-
         //When:
         String region_name = "%평창군%";
         List<Region> regionList = regionRepository.findByNameLike(region_name);

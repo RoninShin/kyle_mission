@@ -35,9 +35,9 @@ import lombok.ToString;
 public class Program {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
 
-    @NaturalId
+    @NaturalId(mutable=true)
     @Column(length = 100)
     private String name;
 

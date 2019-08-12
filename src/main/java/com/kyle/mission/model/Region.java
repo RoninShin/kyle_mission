@@ -34,9 +34,9 @@ import java.util.stream.Stream;
 public class Region {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
 
-    @NaturalId
+    @NaturalId(mutable=true)
     @Column(length = 100)
     private String name;
 

@@ -22,10 +22,10 @@ public class ProgramService {
     ProgramRepository programRepository;
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public Program save(ProgramForm programRequest) {
+    public Program save(long id, ProgramForm programRequest) {
         Program program = new Program (programRequest.getName(), programRequest.getTheme(), programRequest.getPrgm_desc(), programRequest.getPrgm_detail());
-        if (programRequest.getId()>0)
-            program.setId(programRequest.getId());
+        if (id>0)
+            program.setId(id);
 
         try{		
             Region region = regionRepository.findByName(programRequest.getRegion()).orElseGet(() -> {
@@ -34,7 +34,6 @@ public class ProgramService {
 
             program.setRegion(region);
             programRepository.save(program);
-            
         }catch(Exception e){
             throw new RuntimeException(e);
         }

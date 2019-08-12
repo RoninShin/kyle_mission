@@ -19,6 +19,7 @@ import com.kyle.mission.model.RoleName;
 @Repository
 public interface ProgramRepository extends JpaRepository<Program, Long> {
     boolean existsByName(String name);
+    Optional<Program> findByName(String name);
     
     // 프로그램 소개 컬럼에서 특정 문자열이 포함된 레코드에서 서비스 지역 개수를 세어 출력
     @Query(value="select r.name, count(r.name) from regions r inner join programs p on p.region_id = r.id and p.prgm_desc like %:keyword% group by r.name", nativeQuery=true)

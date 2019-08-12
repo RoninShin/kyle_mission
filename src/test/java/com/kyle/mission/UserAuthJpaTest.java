@@ -35,7 +35,7 @@ import static org.junit.Assert.assertThat;
 @DataJpaTest
 @ActiveProfiles("test")
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-public class AuthRestApiTest {
+public class UserAuthJpaTest {
 
     @Autowired
     UserRepository userRepository;
