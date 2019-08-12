@@ -36,8 +36,8 @@ TDD 를 활용하여, 단위 테스트 및 통합 테스트를 진행하고,
     .
     └── api
          └── admin
-              ├── v1/region
-              ├── v1/region/create
+              ├── v1/region
+              ├── v1/region/create
               ├── v1/program
               └── v1/program/create
 
@@ -55,7 +55,7 @@ TDD 를 활용하여, 단위 테스트 및 통합 테스트를 진행하고,
     └── api
          └── touristInfo
               ├── v1/retrieveByRegion
-              ├── v1/frequency
+              ├── v1/frequency
               ├── v1/retrieveByKeyword
               └── v1/recommend
 
