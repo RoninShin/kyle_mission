@@ -8,7 +8,7 @@ import com.kyle.mission.model.Program;
 import com.kyle.mission.model.Region;
 import com.kyle.mission.repository.ProgramRepository;
 import com.kyle.mission.repository.RegionRepository;
-import com.kyle.mission.security.services.ProgramService;
+import com.kyle.mission.service.ProgramService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -128,7 +128,7 @@ public class AdminRestAPIs {
 	public ResponseEntity<?> program_create(@Valid @RequestBody @ApiParam(value = "프로그램 정보", required = true) ProgramForm programRequest) {
 		Program program = programService.save(0L, programRequest);
 		if (program == null || program.getId() == 0)
-			return new ResponseEntity<String>("program regist failed!", HttpStatus.METHOD_FAILURE);
+			return new ResponseEntity<String>("program regist failed!", HttpStatus.BAD_REQUEST);
 
 		return ResponseEntity.ok().body(program);
 	}
@@ -140,7 +140,7 @@ public class AdminRestAPIs {
 											@Valid @RequestBody @ApiParam(value = "프로그램 정보", required = true) ProgramForm programRequest) {
 		Program program = programService.save(id, programRequest);
 		if (program == null || program.getId() == 0)
-			return new ResponseEntity<String>("program update failed!", HttpStatus.METHOD_FAILURE);
+			return new ResponseEntity<String>("program update failed!", HttpStatus.BAD_REQUEST);
 
 		return ResponseEntity.ok().body(program);
 	}

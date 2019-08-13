@@ -8,11 +8,8 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.NaturalId;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 

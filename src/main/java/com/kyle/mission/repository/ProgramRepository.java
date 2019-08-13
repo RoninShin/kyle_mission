@@ -4,17 +4,12 @@ import java.math.BigInteger;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.data.domain.Example;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.kyle.mission.message.response.KeywordResponse;
 import com.kyle.mission.model.Program;
-import com.kyle.mission.model.Region;
-import com.kyle.mission.model.Role;
-import com.kyle.mission.model.RoleName;
 
 @Repository
 public interface ProgramRepository extends JpaRepository<Program, Long> {

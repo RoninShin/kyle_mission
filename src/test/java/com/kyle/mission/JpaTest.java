@@ -1,12 +1,10 @@
 package com.kyle.mission;
 
 import static org.junit.Assert.assertThat;
-import static org.mockito.ArgumentMatchers.isNotNull;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import com.kyle.mission.message.response.KeywordResponse;
 import com.kyle.mission.model.Program;
@@ -14,24 +12,17 @@ import com.kyle.mission.model.Region;
 import com.kyle.mission.repository.ProgramRepository;
 import com.kyle.mission.repository.RegionRepository;
 
-import org.hamcrest.core.IsNot;
-import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.transaction.AfterTransaction;
-import org.springframework.transaction.annotation.Transactional;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.Matchers.greaterThan;
 
 @RunWith(SpringRunner.class)
@@ -108,7 +99,7 @@ public class JpaTest {
         String keyword = "세계문화유산";
         List<Object[]> regionList = programRepository.findRegionByProgramDesc(keyword);
 
-        List<KeywordResponse> keywordResponseList = new ArrayList();
+        List<KeywordResponse> keywordResponseList = new ArrayList<KeywordResponse>();
 		for( Object[] row : regionList) {
 			KeywordResponse item = new KeywordResponse();
 			item.setRegion((String) row[0]);

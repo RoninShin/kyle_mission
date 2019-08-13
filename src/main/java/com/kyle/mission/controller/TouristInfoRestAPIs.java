@@ -10,7 +10,6 @@ import com.kyle.mission.message.request.KeywordForm;
 import com.kyle.mission.message.request.KeywordRegionForm;
 import com.kyle.mission.message.request.RegionForm;
 import com.kyle.mission.message.response.KeywordResponse;
-import com.kyle.mission.model.Program;
 import com.kyle.mission.model.Region;
 import com.kyle.mission.repository.ProgramRepository;
 import com.kyle.mission.repository.RegionRepository;
@@ -23,7 +22,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.Api;
@@ -57,7 +55,7 @@ public class TouristInfoRestAPIs {
 	@PostMapping("/v1/retrieveByKeyword")
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<?> retrieveByKeyword(@Valid @RequestBody @ApiParam(value = "프로그램 소개", required = true) KeywordForm keywordRequest) {
-		List<KeywordResponse> keywordResponseList = new ArrayList();
+		List<KeywordResponse> keywordResponseList = new ArrayList<KeywordResponse>();
 
 		List<Object[]> regionList = programRepository.findRegionByProgramDesc(keywordRequest.getKeyword());
 		for( Object[] row : regionList) {
