@@ -37,10 +37,10 @@ import lombok.RequiredArgsConstructor;
 public class TouristInfoRestAPIs {
 
 	@Autowired
-    RegionRepository regionRepository;
+    private RegionRepository regionRepository;
 
     @Autowired
-    ProgramRepository programRepository;
+    private ProgramRepository programRepository;
 
 	@ApiOperation(value = "생태 관광정보 조회 By 서비스 지역", notes = "서비스 지역 컬럼에서 특정 지역에서 진행되는 프로그램명과 테마를 출력하는 API")
 	@PostMapping("/v1/retrieveByRegion")

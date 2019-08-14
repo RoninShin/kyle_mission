@@ -43,19 +43,19 @@ import com.kyle.mission.security.jwt.JwtProvider;
 public class AuthRestAPIs {
 
     @Autowired
-    AuthenticationManager authenticationManager;
+    private AuthenticationManager authenticationManager;
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Autowired
-    RoleRepository roleRepository;
+    private RoleRepository roleRepository;
 
     @Autowired
-    PasswordEncoder encoder;
+    private PasswordEncoder encoder;
 
     @Autowired
-    JwtProvider jwtProvider;
+    private JwtProvider jwtProvider;
 
     @ApiOperation(value = "토큰 생성", notes = "회원의 토큰을 생성한다.")
     @PostMapping("/v1/signin")

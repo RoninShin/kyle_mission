@@ -1,4 +1,4 @@
-package com.kyle.mission.security;
+package com.kyle.mission.config;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +21,7 @@ import springfox.documentation.service.Parameter;
 @EnableSwagger2
 // @EnableWebMvc
 // @Profile({"local","dev"})
-public class SwaggerConfiguration {
+public class SwaggerConfig {
     @Bean
     public Docket swaggerApi() {
         ParameterBuilder aParameterBuilder = new ParameterBuilder();

@@ -37,13 +37,13 @@ import lombok.RequiredArgsConstructor;
 public class AdminRestAPIs {
 	
     @Autowired
-    RegionRepository regionRepository;
+    private RegionRepository regionRepository;
 
     @Autowired
-    ProgramRepository programRepository;
+    private ProgramRepository programRepository;
 
 	@Autowired
-    ProgramService programService;
+    private ProgramService programService;
 
 	// @GetMapping("/api/test/user")
 	// @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
