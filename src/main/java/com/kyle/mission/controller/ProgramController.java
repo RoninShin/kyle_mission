@@ -3,6 +3,7 @@ package com.kyle.mission.controller;
 import java.util.List;
 
 import com.kyle.mission.common.restapi.GenericController;
+import com.kyle.mission.model.Program;
 import com.kyle.mission.model.RegionEntity;
 import com.kyle.mission.service.RegionService;
 
@@ -19,18 +20,11 @@ import lombok.extern.slf4j.Slf4j;
  
 @Slf4j
 @CrossOrigin(origins = "*", maxAge = 3600)
-@Api(tags = {"4. Region 컨트롤러 추상화 API"})
+@Api(tags = {"5. Program 컨트롤러 추상화 API"})
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/region")
-public class RegionController extends GenericController<RegionEntity, Long> {
+@RequestMapping("/program")
+public class ProgramController extends GenericController<Program, Long> {
     
-    @Autowired
-    private RegionService service;
-    
-    @PostMapping("/search")
-    public List<RegionEntity> selectByName(@RequestBody String intentName) {
-        log.debug("RegionController.selectByCategoryAndName - {}",intentName);
-        return service.selectByCategoryAndName(intentName);
-    }
+
 }
